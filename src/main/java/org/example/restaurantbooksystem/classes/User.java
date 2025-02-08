@@ -15,6 +15,7 @@ public class User {
     private String email;
     private String password;
     private LocalDate birthyear;
+    private String role;
 
     public User() {}
 
@@ -23,6 +24,7 @@ public class User {
         this.email = email;
         this.password = password;
         this.birthyear = birthyear;
+        this.role = "User";
     }
 
     // Getter / Setters
@@ -56,9 +58,11 @@ public class User {
     public void setBirthyear(LocalDate birthyear) {
         this.birthyear = birthyear;
     }
+    public String getRole() { return role; }
+    public void setRole(String role) { this.role = role; }
 
     @Override
     public String toString() {
-        return getId() + " " + getUsername() + " " + getEmail() + " " + getBirthyear();
+        return getId() + " " + getUsername() + " " + getEmail() + " " + getBirthyear() + " " + getRole();
     }
 }
