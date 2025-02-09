@@ -33,13 +33,4 @@ public class JwtUtil {
                 .signWith(SignatureAlgorithm.HS256, JWT_SECRET.getBytes())
                 .compact();
     }
-
-    // Validate the JWT token and return its claims
-    public Claims getClaims(String token) {
-        return Jwts.parser()
-                .setSigningKey(JWT_SECRET.getBytes())
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
-    }
 }

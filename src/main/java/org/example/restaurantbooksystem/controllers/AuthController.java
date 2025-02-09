@@ -57,16 +57,15 @@ public class AuthController {
         if (user != null) {
 
             String token = jwtUtil.generateToken(user);
+            System.out.println(token);
             String encryptedToken = encryptionUtil.encrypt(token);
 
             // Create an HTTP-only cookie to store the encrypted token (expires in 1 hour)
-            Cookie cookie = new Cookie("jtwkey", encryptedToken);
+            Cookie cookie = new Cookie("jwtkey", encryptedToken);
             cookie.setHttpOnly(true);
             cookie.setMaxAge(3600);
             cookie.setPath("/");
             response.addCookie(cookie);
-
-            System.out.println("cookie: " + cookie);
 
             // Return JSON response with user details (without the token)
             return ResponseEntity.ok(Map.of(
