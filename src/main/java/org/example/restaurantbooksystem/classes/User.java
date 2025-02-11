@@ -24,7 +24,6 @@ public class User {
         this.email = email;
         this.password = password;
         this.birthyear = birthyear;
-        this.role = "User";
     }
 
     // Getter / Setters
