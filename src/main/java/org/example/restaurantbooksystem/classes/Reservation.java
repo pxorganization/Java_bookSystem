@@ -1,8 +1,17 @@
 package org.example.restaurantbooksystem.classes;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "reservations")
 public class Reservation {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @Column(name = "user_id")
     private int userId;
+    @Column(name = "table_number")
     private int tableNumber;
     private int people;
     private String surname;
@@ -12,6 +21,8 @@ public class Reservation {
     private String notes;
     private String date;
     private String time;
+
+    public Reservation() {}
 
     public Reservation(int userId, int tableNumber, int people, String surname, String name, String phone, String email, String notes, String date, String time) {
         this.userId = userId;

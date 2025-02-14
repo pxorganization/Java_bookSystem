@@ -5,14 +5,13 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.example.restaurantbooksystem.classes.User;
 import org.example.restaurantbooksystem.services.UserService;
-import org.example.restaurantbooksystem.utils.JwtUtil;
-import org.example.restaurantbooksystem.utils.EncryptionUtil;
+import org.example.restaurantbooksystem.security.JwtUtil;
+import org.example.restaurantbooksystem.security.EncryptionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Optional;
