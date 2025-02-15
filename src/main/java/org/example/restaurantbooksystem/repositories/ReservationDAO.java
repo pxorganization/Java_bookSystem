@@ -19,6 +19,7 @@ public class ReservationDAO {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
+    // Use parameterized query to prevent SQL injection
     public List<Reservation> findReservationsByFilters(ReservationFilterDTO filters) {
         StringBuilder query = new StringBuilder("SELECT table_number, name, email, phone, date, time FROM public.reservations WHERE 1=1");
         List<Object> params = new ArrayList<>();
@@ -58,7 +59,6 @@ public class ReservationDAO {
             params.add(filters.getTime());
         }
 
-        // Use parameterized query to prevent SQL injection
         return jdbcTemplate.query(query.toString(), params.toArray(), new BeanPropertyRowMapper<>(Reservation.class));
     }
 }

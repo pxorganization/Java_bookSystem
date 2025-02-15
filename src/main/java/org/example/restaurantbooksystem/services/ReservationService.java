@@ -37,4 +37,8 @@ public class ReservationService {
             return reservationDAO.findReservationsByFilters(filters);
         }
     }
+
+    public void saveReservation(Reservation reservation) {
+        reservationRepository.save(reservation);
+    }
 }

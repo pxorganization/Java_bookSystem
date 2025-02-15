@@ -13,10 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -34,12 +31,10 @@ public class AuthController {
         this.encryptionUtil = encryptionUtil;
     }
 
-    // Registration endpoint
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody User user) {
         try {
             User createdUser = userService.registerUser(user);
-            // Do not return the password in the response
             createdUser.setPassword(null);
             return ResponseEntity.ok(createdUser);
         } catch (IllegalArgumentException ex) {
@@ -58,22 +53,19 @@ public class AuthController {
 
         User user = userService.loginUser(email, password);
         if (user != null) {
-            // Generate the JWT token
+
             String token = jwtUtil.generateToken(user);
-            // Encrypt the token
             String encryptedToken = encryptionUtil.encrypt(token);
 
-            // Create an HTTP-only cookie to store the encrypted token (expires in 1 hour)
+            // Create cookie
             Cookie cookie = new Cookie("jwt", encryptedToken);
             cookie.setHttpOnly(true);
             cookie.setSecure(true);
             cookie.setMaxAge(3600);
             cookie.setAttribute("SameSite", "Strict");
             cookie.setPath("/");
-            // Optionally, in production, set cookie.setSecure(true) and SameSite attribute.
             response.addCookie(cookie);
 
-            // Return a JSON response with user details
             return ResponseEntity.ok(Map.of(
                     "id", user.getId(),
                     "username", user.getUsername(),
@@ -100,13 +92,14 @@ public class AuthController {
             Claims claims = jwtUtil.validateToken(encryptedToken);
 
             if (claims != null) {
-                // Extract user information from the claims
-                Integer userId = claims.get("id", Integer.class);
+                // Extract user information
+                String userIdString = claims.get("id", String.class); // Extract id as a String
+                UUID userId = UUID.fromString(userIdString); // Convert to UUID
                 String username = claims.get("username", String.class);
                 String email = claims.get("email", String.class);
                 String role = claims.get("role", String.class);
 
-                // Include user information in the response
+                // Include user information
                 Map<String, Object> response = new HashMap<>();
                 response.put("message", "Token is valid");
                 response.put("user", Map.of(
@@ -124,7 +117,6 @@ public class AuthController {
 
     @PostMapping("/logout")
     public ResponseEntity<?> logout(HttpServletResponse response) {
-        // Διαγραφή JWT cookie
         Cookie cookie = new Cookie("jwt", null);
         cookie.setHttpOnly(true);
         cookie.setSecure(true);

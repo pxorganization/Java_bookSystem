@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import javax.crypto.SecretKey;
 import java.security.Key;
 import java.util.Date;
+import java.util.UUID;
 
 @Component
 public class JwtUtil {
@@ -27,7 +28,7 @@ public class JwtUtil {
         this.encryptionUtil = encryptionUtil;
     }
 
-    // Generate a token with a 1-hour expiration time
+    // 1-hour expiration time
     public String generateToken(User user) {
 
         long expirationMillis = 3600 * 1000L;
@@ -36,7 +37,7 @@ public class JwtUtil {
         Key key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(JWT_SECRET));
 
         return Jwts.builder()
-                .claim("id", user.getId())
+                .claim("id", user.getId().toString())
                 .claim("username", user.getUsername())
                 .claim("email", user.getEmail())
                 .claim("role", user.getRole())
@@ -47,10 +48,9 @@ public class JwtUtil {
                 .compact();
     }
 
-    // Μέθοδος που επικυρώνει το JWT token
     public Claims validateToken(String encryptedToken) {
         try {
-            String token = encryptionUtil.decrypt(encryptedToken);  // ✅ Αποκρυπτογράφηση του token
+            String token = encryptionUtil.decrypt(encryptedToken);
             SecretKey key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(JWT_SECRET));
 
             Jws<Claims> claimsJws = Jwts.parser()
@@ -62,12 +62,12 @@ public class JwtUtil {
             Date expiration = claims.getExpiration();
 
             if (expiration.after(new Date())) {
-                return claims;  // Return the claims if the token is valid
+                return claims;
             } else {
-                return null;  // Token is expired
+                return null;
             }
         } catch (Exception e) {
-            return null;  // Token is invalid
+            return null;
         }
     }
 

@@ -1,6 +1,7 @@
 package org.example.restaurantbooksystem.controllers;
 
 import org.example.restaurantbooksystem.classes.Reservation;
+import org.example.restaurantbooksystem.classes.User;
 import org.example.restaurantbooksystem.dtos.ReservationFilterDTO;
 import org.example.restaurantbooksystem.services.ReservationService;
 import org.springframework.web.bind.annotation.*;
@@ -20,11 +21,17 @@ public class ReservationController {
 
     @GetMapping("/all")
     public List<Reservation> getAllReservations() {
-        return reservationService.getAllReservations(); // Return all reservations
+        return reservationService.getAllReservations();
     }
 
     @PostMapping("/allfilters")
     public List<Reservation> getAllReservationsByFilters(@RequestBody ReservationFilterDTO filters) {
         return reservationService.getReservationsByFilters(filters);
     }
+
+    @PostMapping("/savereservation")
+    public void saveReservation(@RequestBody Reservation reservation) {
+        reservationService.saveReservation(reservation);
+    }
+
 }

@@ -3,14 +3,16 @@ package org.example.restaurantbooksystem.classes;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 @Entity
-@Table(name = "users2")
+@Table(name = "users")
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private UUID id;
+
     private String username;
     private String email;
     private String password;
@@ -27,10 +29,10 @@ public class User {
     }
 
     // Getter / Setters
-    public int getId() {
+    public UUID getId() {
         return id;
     }
-    public void setId(int id) {
+    public void setId(UUID id) {
         this.id = id;
     }
     public String getUsername() {

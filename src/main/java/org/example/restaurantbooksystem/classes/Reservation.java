@@ -2,23 +2,20 @@ package org.example.restaurantbooksystem.classes;
 
 import jakarta.persistence.*;
 
-import java.math.BigInteger;
-import java.sql.Time;
-import java.sql.Timestamp;
 import java.time.LocalDate;
-import java.time.LocalTime;
+import java.util.UUID;
 
 @Entity
 @Table(name = "reservations")
 public class Reservation {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-    @Column(name = "user_id")
-    private int userId;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private UUID id;
+
     @Column(name = "table_number")
     private int tableNumber;
+
     private int people;
     private String surname;
     private String name;
@@ -30,8 +27,7 @@ public class Reservation {
 
     public Reservation() {}
 
-    public Reservation(int userId, int tableNumber, int people, String surname, String name, String phone, String email, String notes, LocalDate date, String time) {
-        this.userId = userId;
+    public Reservation(int tableNumber, int people, String surname, String name, String phone, String email, String notes, LocalDate date, String time) {
         this.tableNumber = tableNumber;
         this.people = people;
         this.surname = surname;
@@ -44,18 +40,10 @@ public class Reservation {
     }
 
     // Getters / Setters
-    public int getId() {
+    public UUID getId() {
         return id;
     }
-    public void setId(int id) {
-        this.id = id;
-    }
-    public int getUserId() {
-        return userId;
-    }
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
+    public void setId(UUID id) {}
     public int getTableNumber() {
         return tableNumber;
     }
@@ -113,6 +101,6 @@ public class Reservation {
 
     @Override
     public String toString() {
-        return "Reservation:" + getEmail() + ", " + getDate() + ", " + getTableNumber() + ", " + getPhone() + ", " + getTime();
+        return "Reservation:" + getId() + ", " + getTableNumber() + ", " + getPeople() + ", " + getSurname() + ", " + getName() + ", " + getPhone() + ", " + getEmail() + ", " + getNotes() + ", " + getDate() + ", " + getTime();
     }
 }

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class UserService {
@@ -20,7 +21,7 @@ public class UserService {
         this.bCryptPasswordEncoder = new BCryptPasswordEncoder();
     }
 
-    // Registration: Check for duplicates, hash password and save the user
+    // Register
     public User registerUser(User user) {
 
         if (userRepository.findByEmail(user.getEmail()) != null) {
@@ -35,7 +36,7 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    // Login: Validate email and password; return the user if correct
+    // Login
     public User loginUser(String email, String rawPassword) {
         User user = userRepository.findByEmail(email);
         if (user != null && bCryptPasswordEncoder.matches(rawPassword, user.getPassword())) {
@@ -45,14 +46,8 @@ public class UserService {
         return null;
     }
 
-    // Retrieve all users (for demonstration purposes)
+    // all users
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
-
-    // Retrieve a single user by id
-    public User getUserById(int id) {
-        return userRepository.findById(id).orElse(null);
-    }
-
 }
