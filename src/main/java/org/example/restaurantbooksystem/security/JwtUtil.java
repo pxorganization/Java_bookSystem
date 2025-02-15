@@ -48,7 +48,7 @@ public class JwtUtil {
     }
 
     // Μέθοδος που επικυρώνει το JWT token
-    public Boolean validateToken(String encryptedToken) {
+    public Claims validateToken(String encryptedToken) {
         try {
             String token = encryptionUtil.decrypt(encryptedToken);  // ✅ Αποκρυπτογράφηση του token
             SecretKey key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(JWT_SECRET));
@@ -58,10 +58,16 @@ public class JwtUtil {
                     .build()
                     .parseSignedClaims(token);
 
-            Date expiration = claimsJws.getPayload().getExpiration();
-            return expiration.after(new Date());  // ✅ Επιστρέφει true αν το token δεν έχει λήξει
+            Claims claims = claimsJws.getPayload();
+            Date expiration = claims.getExpiration();
+
+            if (expiration.after(new Date())) {
+                return claims;  // Return the claims if the token is valid
+            } else {
+                return null;  // Token is expired
+            }
         } catch (Exception e) {
-            return false;  // Αν το token δεν είναι έγκυρο ή έχει λήξει
+            return null;  // Token is invalid
         }
     }
 

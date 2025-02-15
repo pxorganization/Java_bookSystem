@@ -7,6 +7,9 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +22,16 @@ public class ReservationDAO {
     public List<Reservation> findReservationsByFilters(ReservationFilterDTO filters) {
         StringBuilder query = new StringBuilder("SELECT table_number, name, email, phone, date, time FROM public.reservations WHERE 1=1");
         List<Object> params = new ArrayList<>();
+
+
+        LocalDate currentDate = LocalDate.now();
+        LocalTime currentTime = LocalTime.now();
+        String formatedTime = DateTimeFormatter.ofPattern("HH:mm").format(currentTime);
+
+        query.append(" AND (date > ? OR (date = ? AND time > ?))");
+        params.add(currentDate);
+        params.add(currentDate);
+        params.add(formatedTime);
 
         if (filters.getTableNumber() != null) {
             query.append(" AND table_number = ?");

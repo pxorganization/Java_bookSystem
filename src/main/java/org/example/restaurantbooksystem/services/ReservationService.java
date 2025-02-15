@@ -6,6 +6,9 @@ import org.example.restaurantbooksystem.repositories.ReservationDAO;
 import org.example.restaurantbooksystem.repositories.ReservationRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Service
@@ -20,7 +23,11 @@ public class ReservationService {
     }
 
     public List<Reservation> getAllReservations() {
-        return reservationRepository.findAll(); // Fetch all reservations
+        LocalDate currentDate = LocalDate.now();
+        LocalTime currentTime = LocalTime.now();
+        String formatedTime = DateTimeFormatter.ofPattern("HH:mm").format(currentTime);
+
+        return reservationRepository.findAllByDateAfterAndTimeAfter(currentDate,formatedTime); // Fetch all reservations
     }
 
     public List<Reservation> getReservationsByFilters(ReservationFilterDTO filters) {

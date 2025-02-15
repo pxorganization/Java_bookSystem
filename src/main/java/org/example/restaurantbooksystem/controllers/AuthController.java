@@ -1,5 +1,6 @@
 package org.example.restaurantbooksystem.controllers;
 
+import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -13,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
@@ -84,7 +86,6 @@ public class AuthController {
 
     @PostMapping("/verify")
     public ResponseEntity<?> verifyToken(HttpServletRequest request) {
-
         Cookie[] cookies = request.getCookies();
         if (cookies == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("No token provided");
@@ -96,9 +97,26 @@ public class AuthController {
 
         if (jwtCookie.isPresent()) {
             String encryptedToken = jwtCookie.get().getValue();
+            Claims claims = jwtUtil.validateToken(encryptedToken);
 
-            if (jwtUtil.validateToken(encryptedToken)) {
-                return ResponseEntity.ok(Map.of("message", "Token is valid"));
+            if (claims != null) {
+                // Extract user information from the claims
+                Integer userId = claims.get("id", Integer.class);
+                String username = claims.get("username", String.class);
+                String email = claims.get("email", String.class);
+                String role = claims.get("role", String.class);
+
+                // Include user information in the response
+                Map<String, Object> response = new HashMap<>();
+                response.put("message", "Token is valid");
+                response.put("user", Map.of(
+                        "id", userId,
+                        "username", username,
+                        "email", email,
+                        "role", role
+                ));
+
+                return ResponseEntity.ok(response);
             }
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid or expired token");
