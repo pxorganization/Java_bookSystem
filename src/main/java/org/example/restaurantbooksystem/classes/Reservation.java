@@ -2,6 +2,12 @@ package org.example.restaurantbooksystem.classes;
 
 import jakarta.persistence.*;
 
+import java.math.BigInteger;
+import java.sql.Time;
+import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalTime;
+
 @Entity
 @Table(name = "reservations")
 public class Reservation {
@@ -19,12 +25,12 @@ public class Reservation {
     private String phone;
     private String email;
     private String notes;
-    private String date;
+    private LocalDate date;
     private String time;
 
     public Reservation() {}
 
-    public Reservation(int userId, int tableNumber, int people, String surname, String name, String phone, String email, String notes, String date, String time) {
+    public Reservation(int userId, int tableNumber, int people, String surname, String name, String phone, String email, String notes, LocalDate date, String time) {
         this.userId = userId;
         this.tableNumber = tableNumber;
         this.people = people;
@@ -92,10 +98,10 @@ public class Reservation {
     public void setNotes(String notes) {
         this.notes = notes;
     }
-    public String getDate() {
+    public LocalDate getDate() {
         return date;
     }
-    public void setDate(String date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
     public String getTime() {
