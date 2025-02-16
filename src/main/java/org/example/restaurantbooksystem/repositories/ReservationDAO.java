@@ -21,7 +21,7 @@ public class ReservationDAO {
 
     // Use parameterized query to prevent SQL injection
     public List<Reservation> findReservationsByFilters(ReservationFilterDTO filters) {
-        StringBuilder query = new StringBuilder("SELECT table_number, name, email, phone, date, time FROM public.reservations WHERE 1=1");
+        StringBuilder query = new StringBuilder("SELECT * FROM reservations WHERE 1=1");
         List<Object> params = new ArrayList<>();
 
 

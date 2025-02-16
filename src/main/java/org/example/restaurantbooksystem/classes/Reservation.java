@@ -43,7 +43,9 @@ public class Reservation {
     public UUID getId() {
         return id;
     }
-    public void setId(UUID id) {}
+    public void setId(UUID id) {
+        this.id = id;
+    }
     public int getTableNumber() {
         return tableNumber;
     }
