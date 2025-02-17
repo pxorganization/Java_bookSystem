@@ -8,5 +8,6 @@ import java.util.List;
 import java.util.UUID;
 
 public interface ReservationRepository extends JpaRepository<Reservation, UUID> {
-    List<Reservation> findAllByDateAfterAndTimeAfter(LocalDate dateAfter, String timeAfter);
+    //List<Reservation> findAllByDateAfterAndTimeAfterOrderByDateAsc(LocalDate dateAfter, String timeAfter);
+    List<Reservation> findAllByDateAfterOrderByDateAsc(LocalDate dateAfter);
 }

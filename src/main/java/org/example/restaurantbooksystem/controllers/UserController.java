@@ -19,19 +19,5 @@ public class UserController {
     public UserController(UserService userService) {
         this.userService = userService;
     }
-
-    @GetMapping("/getAll")
-    public ResponseEntity<?> getAllUsers() {
-        return ResponseEntity.ok(userService.getAllUsers());
-    }
-
-//    @GetMapping("/{id}")
-//    public ResponseEntity<?> getUserById(@PathVariable String id) {
-//        User user = userService.getUserById(id);
-//        if (user == null) {
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-//                    .body("User not found");
-//        }
-//        return ResponseEntity.ok(user);
-//    }
+    
 }

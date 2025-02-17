@@ -14,9 +14,11 @@ public class Reservation {
     private UUID id;
 
     @Column(name = "table_number")
-    private int tableNumber;
+    private Integer tableNumber;
+    @Column(name = "user_id")
+    private UUID userId;
 
-    private int people;
+    private Integer people;
     private String surname;
     private String name;
     private String phone;
@@ -24,11 +26,13 @@ public class Reservation {
     private String notes;
     private LocalDate date;
     private String time;
+    private Boolean iscompleted;
 
     public Reservation() {}
 
-    public Reservation(int tableNumber, int people, String surname, String name, String phone, String email, String notes, LocalDate date, String time) {
+    public Reservation(Integer tableNumber,UUID userId, Integer people, String surname, String name, String phone, String email, String notes, LocalDate date, String time) {
         this.tableNumber = tableNumber;
+        this.userId = userId;
         this.people = people;
         this.surname = surname;
         this.name = name;
@@ -46,16 +50,22 @@ public class Reservation {
     public void setId(UUID id) {
         this.id = id;
     }
-    public int getTableNumber() {
+    public Integer getTableNumber() {
         return tableNumber;
     }
-    public void setTableNumber(int tableNumber) {
+    public void setTableNumber(Integer tableNumber) {
         this.tableNumber = tableNumber;
     }
-    public int getPeople() {
+    public UUID getUserId() {
+        return userId;
+    }
+    public void setUserId(UUID userId) {
+        this.userId = userId;
+    }
+    public Integer getPeople() {
         return people;
     }
-    public void setPeople(int people) {
+    public void setPeople(Integer people) {
         this.people = people;
     }
     public String getSurname() {
@@ -100,9 +110,11 @@ public class Reservation {
     public void setTime(String time) {
         this.time = time;
     }
+    public Boolean getIsCompleted() { return iscompleted; }
+    public void setIsCompleted(Boolean iscompleted) { this.iscompleted = iscompleted; }
 
     @Override
     public String toString() {
-        return "Reservation:" + getId() + ", " + getTableNumber() + ", " + getPeople() + ", " + getSurname() + ", " + getName() + ", " + getPhone() + ", " + getEmail() + ", " + getNotes() + ", " + getDate() + ", " + getTime();
+        return "Reservation:" + getId() + ", " + getTableNumber() + ", " + getUserId() + ", " + getPeople() + ", " + getSurname() + ", " + getName() + ", " + getPhone() + ", " + getEmail() + ", " + getNotes() + ", " + getDate() + ", " + getTime() + ", " + getIsCompleted();
     }
 }

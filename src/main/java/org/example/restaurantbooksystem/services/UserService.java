@@ -6,9 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import java.util.List;
-import java.util.UUID;
-
 @Service
 public class UserService {
 
@@ -44,10 +41,5 @@ public class UserService {
             return user;
         }
         return null;
-    }
-
-    // all users
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
     }
 }

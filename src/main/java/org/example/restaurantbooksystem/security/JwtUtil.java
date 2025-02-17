@@ -5,6 +5,8 @@ import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import org.example.restaurantbooksystem.classes.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,8 +14,9 @@ import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import java.security.Key;
+import java.util.Arrays;
 import java.util.Date;
-import java.util.UUID;
+import java.util.Optional;
 
 @Component
 public class JwtUtil {
@@ -71,5 +74,23 @@ public class JwtUtil {
         }
     }
 
+    public Boolean isAuthenticated(HttpServletRequest request ){
+        Cookie[] cookies = request.getCookies();
+        if (cookies == null) {
+            return false;
+        }
+
+        Optional<Cookie> jwtCookie = Arrays.stream(cookies)
+                .filter(cookie -> "jwt".equals(cookie.getName()))
+                .findFirst();
+
+        if (jwtCookie.isPresent()) {
+            String encryptedToken = jwtCookie.get().getValue();
+            Claims isValid = validateToken(encryptedToken);
+
+            return isValid != null;
+        }
+        return false;
+    }
 
 }
