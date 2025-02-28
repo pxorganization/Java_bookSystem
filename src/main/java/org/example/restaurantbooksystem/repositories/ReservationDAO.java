@@ -24,7 +24,6 @@ public class ReservationDAO {
         StringBuilder query = new StringBuilder("SELECT * FROM reservations WHERE 1=1");
         List<Object> params = new ArrayList<>();
 
-
         LocalDate currentDate = LocalDate.now();
         LocalTime currentTime = LocalTime.now();
         String formatedTime = DateTimeFormatter.ofPattern("HH:mm").format(currentTime);
@@ -60,5 +59,16 @@ public class ReservationDAO {
         }
 
         return jdbcTemplate.query(query.toString(), params.toArray(), new BeanPropertyRowMapper<>(Reservation.class));
+    }
+
+    public List<Integer> findReservedTables(Integer people, String time, LocalDate date) {
+        String sql = "SELECT t.id " +
+                "FROM tables t " +
+                "JOIN reservations r ON t.id = r.table_number " +
+                "WHERE t.people = ? " +
+                "AND r.date = ? " +
+                "AND (r.time::time BETWEEN (?::time - INTERVAL '2 hours') AND (?::time + INTERVAL '2 hours'))";
+
+        return jdbcTemplate.query(sql, new Object[]{people, date, time, time}, (rs, rowNum) -> rs.getInt("id"));
     }
 }

@@ -4,6 +4,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.example.restaurantbooksystem.classes.Reservation;
 import org.example.restaurantbooksystem.classes.User;
 import org.example.restaurantbooksystem.dtos.ReservationFilterDTO;
+import org.example.restaurantbooksystem.dtos.ReservationRequestDTO;
+import org.example.restaurantbooksystem.repositories.ReservationDAO;
 import org.example.restaurantbooksystem.services.ReservationService;
 import org.example.restaurantbooksystem.services.UserService;
 import org.springframework.http.ResponseEntity;
@@ -22,11 +24,13 @@ public class ReservationController {
 
     private final ReservationService reservationService;
     private final UserService userService;
+    private final ReservationDAO reservationDAO;
 
 
-    public ReservationController(ReservationService reservationService, UserService userService) {
+    public ReservationController(ReservationService reservationService, UserService userService, ReservationDAO reservationDAO) {
         this.reservationService = reservationService;
         this.userService = userService;
+        this.reservationDAO = reservationDAO;
     }
 
     @PostMapping("/filters")
@@ -52,9 +56,9 @@ public class ReservationController {
         LocalDate date = LocalDate.parse((String) payload.get("date"));
         String time = (String) payload.get("time");
         Boolean createAccount = (Boolean) payload.get("createAccount");
-        LocalDate birthDate = LocalDate.parse((String) payload.get("birthDate"));
 
         if (createAccount && userId == null) {
+            LocalDate birthDate = LocalDate.parse((String) payload.get("birthDate"));
             User user = new User(name, email, surname + "2025", birthDate);
             User createdUser = userService.registerUser(user);
 
@@ -67,6 +71,11 @@ public class ReservationController {
             reservationService.saveReservation(reservation);
             return ResponseEntity.ok("Reservation saved successfully");
         }
+    }
+
+    @PostMapping("/tables")
+    public List<Integer> availableTables(@RequestBody ReservationRequestDTO request) {
+        return reservationDAO.findReservedTables(request.getPeople(), request.getTime(), request.getDate());
     }
 
     @PostMapping("/returnable/{id}")
