@@ -83,6 +83,16 @@ public class ReservationController {
         return reservationService.getReservationById(id);
     }
 
+    @PostMapping("/checkin")
+    public List<Reservation> reservationCheckIn() {
+        return reservationService.getCompletedReservations();
+    }
+
+    @PostMapping("/availabletables")
+    public List<Integer> availableTablesToday() {
+        return reservationService.getTodaysTables();
+    }
+
     @DeleteMapping("/cancel/{id}")
     public void deleteReservation(@PathVariable UUID id, HttpServletRequest request) {
         reservationService.deleteReservationById(id, request);

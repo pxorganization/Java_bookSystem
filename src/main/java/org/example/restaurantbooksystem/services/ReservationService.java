@@ -50,6 +50,16 @@ public class ReservationService {
         return reservationRepository.findById(id);
     }
 
+    public List<Reservation> getCompletedReservations() {
+        LocalDate currentDate = LocalDate.now();
+        return reservationRepository.findAllByIscompletedAndDateEquals(true,currentDate);
+    }
+
+    public List<Integer> getTodaysTables() {
+        LocalDate currentDate = LocalDate.now();
+        return reservationRepository.findTableNumberByDate(currentDate);
+    }
+
     public void deleteReservationById(UUID id, HttpServletRequest request) {
         if( jwtUtil.isAuthenticated(request)){
              reservationRepository.deleteById(id);
