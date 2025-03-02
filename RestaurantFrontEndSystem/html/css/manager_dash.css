@@ -489,49 +489,47 @@ textarea {
   padding: 10px;
 }
 
-/* Profile View Styles */
-.profile-view {
+.profile-dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px;
+  color: #ffffff;
   background-color: #6b5840;
-  padding: 2rem;
-  border-radius: 15px;
-  margin-top: 20px;
-  color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.profile-view h2 {
-  margin-bottom: 1.5rem;
-  color: white;
+.profile-dashboard h2{
+  text-align: center;
 }
 
-.profile-view .form-group {
-  margin-bottom: 1rem;
+.form-groups {
+  margin-bottom: 15px;
 }
 
-.profile-view label {
+.form-groups label {
   display: block;
-  margin-bottom: 0.5rem;
-  font-size: 0.9rem;
-  color: white;
+  margin-bottom: 5px;
+  font-weight: bold;
 }
 
-.profile-view input {
+.form-groups input {
   width: 100%;
-  padding: 0.5rem;
-  border: none;
-  border-radius: 5px;
-  font-size: 0.9rem;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }
 
-.profile-view .save-btn {
-  padding: 0.5rem 1rem;
+.save-btn {
   background-color: #b25c2a;
   color: white;
+  padding: 10px 20px;
   border: none;
-  border-radius: 5px;
+  border-radius: 4px;
   cursor: pointer;
-  transition: background-color 0.2s;
 }
 
-.profile-view .save-btn:hover {
-  background-color: #994d23;
+.save-btn:hover {
+  background-color: #954b26;
 }

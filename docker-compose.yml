@@ -12,7 +12,7 @@ services:
       - postgres-data:/var/lib/postgresql/data
       - ./init-scripts:/docker-entrypoint-initdb.d
     ports:
-      - "5432:5432" # Map host port 5432 to container port 5432
+      - "5432:5432"
     networks:
       - app-network
 
@@ -28,9 +28,9 @@ services:
       SPRING_DATASOURCE_USERNAME: usersystem
       SPRING_DATASOURCE_PASSWORD: passreserv
     ports:
-      - "8080:8080" # Map host port 8080 to container port 8080
+      - "8080:8080"
     volumes:
-      - ./RestaurantBookSystem:/app  # Mount the backend source code
+      - ./RestaurantBookSystem:/app  # backend code
     networks:
       - app-network
 
@@ -40,9 +40,9 @@ services:
       dockerfile: Dockerfile-frontend
     container_name: restaurant_frontend
     ports:
-      - "8081:80" # Map host port 8081 to container port 80
+      - "8081:80"
     volumes:
-      - ./RestaurantFrontEndSystem/html:/usr/share/nginx/html  # Mount the frontend files
+      - ./RestaurantFrontEndSystem/html:/usr/share/nginx/html  # frontend files
     networks:
       - app-network
 

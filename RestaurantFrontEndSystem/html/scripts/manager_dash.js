@@ -40,6 +40,8 @@ navItems.forEach((item) => {
       showReservationsView();
     } else if (page === "completed") {
       showCompletedView();
+    } else if (page === "manage") {
+      showManageView();
     } else if (page === "profile") {
       viewProfile();
     }
@@ -49,55 +51,6 @@ navItems.forEach((item) => {
 // Clear main content (set it to empty)
 function clearMainContent() {
   mainContent.innerHTML = ""; // Clear all content inside mainContent
-}
-
-// Profile function
-function viewProfile() {
-  console.log("Profile");
-  // const profileView = document.createElement("div");
-  // profileView.className = "profile-view";
-  // profileView.innerHTML = `
-  //         <h2>Profile</h2>
-  //         <form id="profileForm">
-  //             <div class="form-group">
-  //                 <label for="profileName">Name</label>
-  //                 <input type="text" id="profileName" name="name" placeholder="Enter your name" required>
-  //             </div>
-  //             <div class="form-group">
-  //                 <label for="profileEmail">Email</label>
-  //                 <input type="email" id="profileEmail" name="email" placeholder="Enter your email" required>
-  //             </div>
-  //             <div class="form-group">
-  //                 <label for="profilePhone">Phone</label>
-  //                 <input type="tel" id="profilePhone" name="phone" placeholder="Enter your phone number">
-  //             </div>
-  //             <button type="submit" class="save-btn">Save Changes</button>
-  //         </form>
-  //     `;
-  // mainContent.appendChild(profileView);
-
-  // // Load existing profile data
-  // const profileData = JSON.parse(localStorage.getItem("profile")) || {};
-  // document.getElementById("profileName").value = profileData.name || "";
-  // document.getElementById("profileEmail").value = profileData.email || "";
-  // document.getElementById("profilePhone").value = profileData.phone || "";
-
-  // // Handle form submission
-  // const profileForm = document.getElementById("profileForm");
-  // profileForm.addEventListener("submit", function (e) {
-  //   e.preventDefault();
-
-  //   // Get form data
-  //   const name = document.getElementById("profileName").value;
-  //   const email = document.getElementById("profileEmail").value;
-  //   const phone = document.getElementById("profilePhone").value;
-
-  //   // Save profile data to localStorage
-  //   const profileData = { name, email, phone };
-  //   localStorage.setItem("profile", JSON.stringify(profileData));
-
-  //   alert("Profile updated successfully!");
-  // });
 }
 
 const planData = {
@@ -234,9 +187,115 @@ function drawTable(tableConfig, reservedTableIds = []) {
   layer.add(group);
 }
 
+async function viewProfile() {
+  console.log("Profile");
+  // Create and append the header
+  const header = document.createElement("div");
+  header.className = "header";
+  header.innerHTML = `
+        <div class="letter">Manager Panel - My profile</div>
+    `;
+  mainContent.appendChild(header);
+
+  // Create the profile dashboard
+  const profileDashboard = document.createElement("div");
+  profileDashboard.className = "profile-dashboard";
+
+  // Display user data in a form
+  profileDashboard.innerHTML = `
+    <h2>Account</h2>
+    <form id="profileForm">
+      <div class="form-groups">
+        <label for="userId">ID</label>
+        <input type="text" id="userId" name="id" readonly>
+      </div>
+      <div class="form-groups">
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" >
+      </div>
+      <div class="form-groups">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" >
+      </div>
+      <div class="form-groups">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" placeholder="Enter new password">
+      </div>
+      <div class="form-groups">
+        <label for="repPassword">Repeat Password</label>
+        <input type="password" id="repPassword" name="password" placeholder="Repeat new password">
+      </div>
+      <div class="form-groups">
+        <label for="birthyear">Birth Year</label>
+        <input type="date" id="birthyear" name="birthyear" >
+      </div>
+      <button type="submit" class="save-btn">Save Changes</button>
+    </form>
+  `;
+
+  // Append the dashboard to the main content
+  mainContent.appendChild(profileDashboard);
+
+  document.getElementById('userId').value = userid;
+  document.getElementById('username').value = username;
+  document.getElementById('email').value = userEmail;
+
+  // Handle form submission
+  const profileForm = document.getElementById("profileForm");
+  profileForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    // Get updated values from the form
+    const updatedUser = {
+      id: user.id, // ID cannot be changed
+      username: document.getElementById("username").value,
+      email: document.getElementById("email").value,
+      password: document.getElementById("password").value,
+      birthyear: document.getElementById("birthyear").value,
+    };
+
+    // Send updated data to the backend
+    // const success = await updateUserData(updatedUser);
+    // if (success) {
+    //   alert("Profile updated successfully!");
+    // } else {
+    //   alert("Failed to update profile. Please try again.");
+    // }
+  });
+}
+
+async function showManageView() {
+  // Create and append the header
+  const header = document.createElement("div");
+  header.className = "header";
+  header.innerHTML = `
+        <div class="letter">Manager Panel - Edit Users</div>
+    `;
+  mainContent.appendChild(header);
+
+  const reservationsTable = document.createElement("table");
+  reservationsTable.className = "reservations-table";
+  reservationsTable.id = "manageTable";
+  reservationsTable.innerHTML = `
+          <thead>
+              <tr>
+                  <th>Username</th>
+                  <th>Email</th>
+                  <th>BirthYear</th>
+                  <th>Role</th>
+                  <th>Action</th>
+              </tr>
+          </thead>
+          <tbody>
+          </tbody>
+      `;
+  mainContent.appendChild(reservationsTable);
+
+  await loadUsers()
+}
+
 // Show Tables View
 async function showTablesView() {
-  console.log("Available Tables");
   // Create the container for the map
   const tablesView = document.createElement("div");
   // Create and append the header
@@ -271,7 +330,6 @@ async function showTablesView() {
 
 // Show Completed View
 function showCompletedView() {
-  console.log("Completed");
   // Create and append the header
   const header = document.createElement("div");
   header.className = "header";
@@ -279,7 +337,7 @@ function showCompletedView() {
         <div class="letter">Manager Panel - Completed Reservations</div>
     `;
   mainContent.appendChild(header);
-  // Create and append the reservations table
+
   const reservationsTable = document.createElement("table");
   reservationsTable.className = "reservations-table";
   reservationsTable.id = "reservationsTable";
@@ -296,7 +354,6 @@ function showCompletedView() {
               </tr>
           </thead>
           <tbody>
-              <!-- Table content will be populated by JavaScript -->
           </tbody>
       `;
   mainContent.appendChild(reservationsTable);
@@ -314,6 +371,7 @@ const welcomeMessage = document.getElementById("welcome-message");
 // Get the modals
 const updateModal = document.getElementById("updateModal");
 const cancelModal = document.getElementById("cancelModal");
+const editModal = document.getElementById("editModal");
 
 // Get the <span> elements that close the modals
 const closeButtons = document.querySelectorAll(".close");
@@ -321,6 +379,7 @@ const closeButtons = document.querySelectorAll(".close");
 // Get the elements to display reservation IDs
 const updateReservationId = document.getElementById("updateReservationId");
 const cancelReservationId = document.getElementById("cancelReservationId");
+const editUserId = document.getElementById("updateUserId");
 
 // Setup event listeners for the reservations view
 function setupEventListeners() {
@@ -330,7 +389,21 @@ function setupEventListeners() {
   }
 }
 
-//  Logout χρήστη
+async function applyFilters() {
+  const filters = {
+    tableNumber: document.getElementById("table_number").value,
+    name: document.getElementById("user_name").value,
+    email: document.getElementById("email_address").value,
+    phone: document.getElementById("telephone").value,
+    date: document.getElementById("date_resv").value,
+    time: document.getElementById("date_time").value,
+  };
+
+  await loadReservations(filters);
+}
+
+// API CALLS
+
 async function logout() {
   try {
     const response = await fetch("http://localhost:8080/api/auth/logout", {
@@ -350,7 +423,12 @@ async function logout() {
   }
 }
 
-//  Επαλήθευση χρήστη
+let userid;
+let username;
+let userRole;
+let userEmail;
+
+
 async function verifyUser() {
   try {
     const response = await fetch("http://localhost:8080/api/auth/verify", {
@@ -361,6 +439,11 @@ async function verifyUser() {
 
     if (response.ok) {
       const data = await response.json();
+      console.log(data);
+      userid = data.user.id;
+      username = data.user.username;
+      userRole = data.user.role;
+      userEmail = data.user.email;
       welcomeMessage.textContent = `Welcome, ${data.user.username}`;
     } else {
       console.error("Verification Failed");
@@ -372,22 +455,6 @@ async function verifyUser() {
   }
 }
 
-//  Εφαρμογή φίλτρων
-async function applyFilters() {
-  console.log("Mpike stin filters");
-  const filters = {
-    tableNumber: document.getElementById("table_number").value,
-    name: document.getElementById("user_name").value,
-    email: document.getElementById("email_address").value,
-    phone: document.getElementById("telephone").value,
-    date: document.getElementById("date_resv").value,
-    time: document.getElementById("date_time").value,
-  };
-
-  await loadReservations(filters);
-}
-
-//  Φόρτωση κρατήσεων
 async function loadReservations(filters = {}) {
   try {
     const response = await fetch(
@@ -408,7 +475,6 @@ async function loadReservations(filters = {}) {
   }
 }
 
-//  Φόρτωση κρατήσεων
 async function loadCheckIn() {
   try {
     const response = await fetch(
@@ -454,9 +520,51 @@ async function fetchReservedTables() {
   }
 }
 
+async function loadUsers() {
+  try {
+    const response = await fetch(
+        "http://localhost:8080/api/user/all",
+        {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+        }
+    );
+
+    if (!response.ok) throw new Error("Failed to fetch reservations");
+
+    const data = await response.json();
+    loadFetchedUsers(data);
+  } catch (error) {
+    console.error("Error fetching reservations:", error);
+  }
+}
+
+function loadFetchedUsers(users) {
+  const table = document.getElementById("manageTable");
+  const tbody = table.querySelector("tbody");
+  tbody.innerHTML = ""; // Clear existing rows
+
+  users.forEach((user) => {
+    const row = document.createElement("tr");
+    row.innerHTML = `
+          <td>${user.username}</td>
+          <td>${user.email}</td>
+          <td>${user.birthyear}</td>
+          <td>${user.role}</td>
+          <td>
+            <button class="list-btns" data-id="${user.id}" 
+                    style="background: #b25c2a; color: white; border: none; padding: 8px 10px; border-radius: 4px; margin-right: 5px; cursor: pointer;">Edit</button>
+          </td>
+        `;
+    tbody.appendChild(row);
+  });
+
+  // Attach event listeners to the buttons in the table
+  attachTableEventListeners();
+}
+
 // Show Reservations View
 function showReservationsView() {
-  console.log("Reservations");
 
   // Create and append the header
   const header = document.createElement("div");
@@ -518,7 +626,6 @@ function showReservationsView() {
               </tr>
           </thead>
           <tbody>
-              <!-- Table content will be populated by JavaScript -->
           </tbody>
       `;
   mainContent.appendChild(reservationsTable);
@@ -633,6 +740,36 @@ function attachTableEventListeners() {
         cancelReservationId.textContent = btn.dataset.id;
         cancelModal.style.display = "block";
       });
+    }else if (btn.textContent === "Edit") {
+      btn.addEventListener("click", async () => {
+        const userId = btn.dataset.id;
+        try {
+          // Fetch reservation details
+          const response = await fetch(
+              `http://localhost:8080/api/user/returnable/${userId}`,
+              {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                credentials: "include",
+              }
+          );
+
+          if (!response.ok) throw new Error("Failed to fetch User");
+          const user = await response.json();
+
+          // Populate the form fields with user's data
+          document.getElementById("updateUsername").value = user.username;
+          document.getElementById("updateUserEmail").value = user.email;
+          document.getElementById("updateUserDate").value = user.birthyear;
+          document.getElementById("updateUserRole").value = user.role;
+
+          editUserId.textContent = user.id;
+          editModal.style.display = "block";
+        } catch (error) {
+          console.error("Error fetching User details:", error);
+          alert("Failed to fetch User details. Please try again.");
+        }
+      });
     }
   });
 }
@@ -642,6 +779,7 @@ closeButtons.forEach((btn) => {
   btn.addEventListener("click", () => {
     updateModal.style.display = "none";
     cancelModal.style.display = "none";
+    editModal.style.display = "none";
   });
 });
 
@@ -652,6 +790,9 @@ window.addEventListener("click", (event) => {
   }
   if (event.target === cancelModal) {
     cancelModal.style.display = "none";
+  }
+  if (event.target === editModal) {
+    editModal.style.display = "none";
   }
 });
 
@@ -717,5 +858,41 @@ document.getElementById("confirmCancel").addEventListener("click", async () => {
   } catch (error) {
     console.error("Error canceling reservation:", error);
     alert("Failed to cancel reservation. Please try again.");
+  }
+});
+
+// Confirm Edit button
+document.getElementById("confirmEdit").addEventListener("click", async () => {
+  const userId = editUserId.textContent;
+
+  // Get updated data from the form
+  const updatedData = {
+    id: userId,
+    username: document.getElementById("updateUsername").value,
+    email: document.getElementById("updateUserEmail").value,
+    birthyear: document.getElementById("updateUserDate").value,
+    role: document.getElementById("updateUserRole").value,
+  };
+
+  try {
+    // Send the updated data to the server
+    const response = await fetch(
+        `http://localhost:8080/api/user/update/${userId}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify(updatedData),
+        }
+    );
+
+    if (!response.ok) throw new Error("Failed to update User");
+
+    alert("User updated successfully!");
+    updateModal.style.display = "none";
+    await loadUsers();
+  } catch (error) {
+    console.error("Error updating user:", error);
+    alert("Failed to update User. Please try again.");
   }
 });
