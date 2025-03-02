@@ -1,0 +1,54 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:latest
+    container_name: restaurant_database
+    environment:
+      POSTGRES_DB: reservsystem
+      POSTGRES_USER: usersystem
+      POSTGRES_PASSWORD: passreserv
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./init-scripts:/docker-entrypoint-initdb.d
+    ports:
+      - "5432:5432" # Map host port 5432 to container port 5432
+    networks:
+      - app-network
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile-backend
+    container_name: restaurant_backend
+    depends_on:
+      - db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/reservsystem
+      SPRING_DATASOURCE_USERNAME: usersystem
+      SPRING_DATASOURCE_PASSWORD: passreserv
+    ports:
+      - "8080:8080" # Map host port 8080 to container port 8080
+    volumes:
+      - ./RestaurantBookSystem:/app  # Mount the backend source code
+    networks:
+      - app-network
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile-frontend
+    container_name: restaurant_frontend
+    ports:
+      - "8081:80" # Map host port 8081 to container port 80
+    volumes:
+      - ./RestaurantFrontEndSystem/html:/usr/share/nginx/html  # Mount the frontend files
+    networks:
+      - app-network
+
+volumes:
+  postgres-data:
+
+networks:
+  app-network:
+    driver: bridge
