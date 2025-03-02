@@ -16,11 +16,15 @@ body {
   min-height: 100vh;
 }
 .map-class {
-  border: 1px solid #ccc;
+  border: 2px solid black;
+  border-radius: 10px;
   margin: 20px 0;
+  max-width: fit-content;
   height: 550px;
 }
-
+.centered{
+  justify-items: center;
+}
 .special-btn {
   background: #6b5840;
   color: white;

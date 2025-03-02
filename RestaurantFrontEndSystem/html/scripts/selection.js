@@ -65,17 +65,17 @@ const planData = {
     { id: 1, shape: "square-4", x: 300, y: 300, reserved: false },
     { id: 2, shape: "square-4", x: 700, y: 300, reserved: false },
     { id: 3, shape: "square-4", x: 1100, y: 300, reserved: false },
-    { id: 4, shape: "square-4", x: 300, y: 900, reserved: false },
-    { id: 5, shape: "square-4", x: 700, y: 900, reserved: false },
-    { id: 6, shape: "square-4", x: 1100, y: 900, reserved: false },
-    { id: 7, shape: "square-4", x: 300, y: 1500, reserved: false },
-    { id: 8, shape: "square-4", x: 700, y: 1500, reserved: false },
-    { id: 9, shape: "square-4", x: 1100, y: 1500, reserved: false },
-    { id: 10, shape: "square-4", x: 1500, y: 300, reserved: false },
-    { id: 11, shape: "square-4", x: 1500, y: 900, reserved: false },
-    { id: 12, shape: "square-4", x: 1500, y: 1500, reserved: false },
-    { id: 13, shape: "square-4", x: 1900, y: 300, reserved: false },
-    { id: 14, shape: "square-4", x: 1900, y: 900, reserved: false },
+    { id: 6, shape: "square-4", x: 300, y: 900, reserved: false },
+    { id: 7, shape: "square-4", x: 700, y: 900, reserved: false },
+    { id: 8, shape: "square-4", x: 1100, y: 900, reserved: false },
+    { id: 11, shape: "square-4", x: 300, y: 1500, reserved: false },
+    { id: 12, shape: "square-4", x: 700, y: 1500, reserved: false },
+    { id: 13, shape: "square-4", x: 1100, y: 1500, reserved: false },
+    { id: 4, shape: "square-4", x: 1500, y: 300, reserved: false },
+    { id: 9, shape: "square-4", x: 1500, y: 900, reserved: false },
+    { id: 14, shape: "square-4", x: 1500, y: 1500, reserved: false },
+    { id: 5, shape: "square-4", x: 1900, y: 300, reserved: false },
+    { id: 10, shape: "square-4", x: 1900, y: 900, reserved: false },
     { id: 15, shape: "square-4", x: 1900, y: 1500, reserved: false },
   ],
 };
@@ -93,10 +93,10 @@ const tableData = {
     width: 200,
     height: 200,
     chairPositions: [
-      { x: 0, y: 0.5, angle: 0 },
-      { x: 0.5, y: 0, angle: 90 },
-      { x: 1, y: 0.5, angle: 180 },
-      { x: 0.5, y: 1, angle: 270 },
+      { x: -0.05, y: 0.5, angle: 0 },
+      { x: 0.5, y: -0.05, angle: 90 },
+      { x: 1.05, y: 0.5, angle: 180 },
+      { x: 0.5, y: 1.05, angle: 270 },
     ],
   },
 };
@@ -104,7 +104,7 @@ const tableData = {
 const stage = new Konva.Stage({
   container: "container",
   width: 625,
-  height: 500,
+  height: 550,
   scaleX: 0.3,
   scaleY: 0.3,
 });
@@ -130,12 +130,13 @@ function drawTable(tableConfig, reservedTableIds = []) {
       width: data.width,
       height: data.height,
       stroke: "silver",
-      strokeWidth: 4,
+      strokeWidth: 6,
       fill:
         Array.isArray(reservedTableIds) &&
         reservedTableIds.includes(tableConfig.id)
           ? "red"
           : "green",
+      cornerRadius: 20, // Change border radius here
     });
   } else {
     tableShape = new Konva.Circle({
@@ -175,7 +176,7 @@ function drawTable(tableConfig, reservedTableIds = []) {
       offsetX: chairSize.width / 2,
       offsetY: chairSize.height / 2,
       stroke: "silver",
-      strokeWidth: 4,
+      strokeWidth: 5,
       fill: "transparent",
       cornerRadius: [0, 20, 20, 0],
     });

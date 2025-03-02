@@ -85,7 +85,6 @@ public class ReservationController {
 
     @PostMapping("/checkin")
     public List<Reservation> reservationCheckIn() {
-        System.out.println("checkin");
         return reservationService.getCompletedReservations();
     }
 
