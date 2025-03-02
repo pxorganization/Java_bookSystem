@@ -9,11 +9,12 @@ import org.example.restaurantbooksystem.security.JwtUtil;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-//import java.time.LocalTime;
-//import java.time.format.DateTimeFormatter;
 
 @Service
 public class ReservationService {
@@ -31,11 +32,10 @@ public class ReservationService {
     public List<Reservation> getReservationsByFilters(ReservationFilterDTO filters) {
         if (filters == null || filters.isEmpty()) {
             LocalDate currentDate = LocalDate.now();
-            //LocalTime currentTime = LocalTime.now();
-            //String formatedTime = DateTimeFormatter.ofPattern("HH:mm").format(currentTime);
+            LocalTime currentTime = LocalTime.now();
+            String formatedTime = DateTimeFormatter.ofPattern("HH:mm").format(currentTime);
 
-            //return reservationRepository.findAllByDateAfterAndTimeAfter(currentDate,formatedTime); // Fetch all reservations
-            return reservationRepository.findAllByDateAfterOrderByDateAsc(currentDate); // Fetch all reservations
+            return reservationRepository.findAllByDateAfterAndTimeAfterOrderByDateAsc(currentDate,formatedTime);
         } else {
             return reservationDAO.findReservationsByFilters(filters);
         }
@@ -57,7 +57,40 @@ public class ReservationService {
 
     public List<Integer> getTodaysTables() {
         LocalDate currentDate = LocalDate.now();
-        return reservationRepository.findTableNumberByDate(currentDate);
+        LocalTime currentTime = LocalTime.now();
+
+        // Calculate the start and end times for the ±2-hour window
+        LocalTime startTime = currentTime.minusHours(2);
+        LocalTime endTime = currentTime.plusHours(2);
+
+        // Format the times as strings
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+        String formattedStartTime = startTime.format(timeFormatter);
+        String formattedEndTime = endTime.format(timeFormatter);
+
+        // Handle the case where the time range spans midnight
+        if (startTime.isAfter(endTime)) {
+            // Fetch records for the current day (from startTime to 23:59)
+            List<Integer> tables1 = reservationRepository.findTableNumberByDateAndTimeRange(
+                    currentDate, formattedStartTime, "23:59"
+            );
+
+            // Fetch records for the next day (from 00:00 to endTime)
+            LocalDate nextDate = currentDate.plusDays(1);
+            List<Integer> tables2 = reservationRepository.findTableNumberByDateAndTimeRange(
+                    nextDate, "00:00", formattedEndTime
+            );
+
+            // Combine the results
+            List<Integer> allTables = new ArrayList<>(tables1);
+            allTables.addAll(tables2);
+            return allTables;
+        } else {
+            // Fetch records for the current day
+            return reservationRepository.findTableNumberByDateAndTimeRange(
+                    currentDate, formattedStartTime, formattedEndTime
+            );
+        }
     }
 
     public void deleteReservationById(UUID id, HttpServletRequest request) {
