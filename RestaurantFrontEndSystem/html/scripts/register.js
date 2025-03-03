@@ -1,4 +1,6 @@
 "use strict";
+verifyUser();
+
 
 document.addEventListener("DOMContentLoaded", function () {
   const registerForm = document.querySelector("form");
@@ -58,3 +60,25 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 });
+
+async function verifyUser() {
+  try {
+    const response = await fetch("http://localhost:8080/api/auth/verify", {
+      method: "POST",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      const role = data.user.role;
+      if (role === 'MANAGER'){
+        window.location.href = "/pages/manager_dash.html";
+      }else if (role === 'USER'){
+        window.location.href = "/pages/selection.html";
+      }
+    }
+  } catch (error) {
+    console.error("Network Error:", error);
+  }
+}

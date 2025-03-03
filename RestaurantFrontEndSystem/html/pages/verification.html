@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Reservation Verification</title>
     <link rel="icon" type="image/x-icon" href="/images/favicon.ico" />
+
     <style>
       body {
         font-family: cursive, sans-serif;
@@ -13,7 +14,6 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        height: 100vh;
         margin: 0;
       }
       .header {
@@ -35,27 +35,37 @@
         margin-top: 10px;
         width: 400px;
         text-align: center;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
       }
-      .barcode {
-        margin-top: 15px;
+      .logo {
+        width: 500px;
+        margin-top: 80px;
+        display: block;
       }
-      .close-btn {
-        background: #b25c2a;
-        color: white;
-        border: none;
-        padding: 10px;
-        border-radius: 5px;
-        cursor: pointer;
-        margin-top: 10px;
+      /* Center the QR code container */
+      #qrcode {
+        justify-items: center;
+        margin: auto;
+        padding: 5px;
+        background-color: #f9f9f9;
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+        max-width: fit-content;
       }
+
     </style>
   </head>
   <body>
     <div class="header">Reservation Verification</div>
+    <img
+            class="logo"
+            src="/images/Screenshot 2025-02-03 220219.png"
+            alt="Restaurant Logo"
+    />
 
     <div class="reservation-details" id="reservationDetails">
       <h2>Reservation Confirmed!</h2>
-      <p><strong>Reservation Number:</strong> <span id="resNumber"></span></p>
+      <p><strong>Reservation ID</strong> </br><span id="reservationId"></span></p>
       <p><strong>Table Number:</strong> <span id="tableNumber"></span></p>
       <p><strong>People:</strong> <span id="people"></span></p>
       <p><strong>Name:</strong> <span id="name"></span></p>
@@ -64,15 +74,17 @@
       <p><strong>Time:</strong> <span id="time"></span></p>
       <p><strong>Phone:</strong> <span id="phone"></span></p>
       <p><strong>Email:</strong> <span id="email"></span></p>
-      <p><strong>Notes:</strong> <span id="notes"></span></p>
-      <img class="barcode" id="barcode" src="" alt="Barcode" />
+      <p><strong>Notes</strong> </br><span id="notes"></span></p>
+      <div id="qrcode"></div> <!-- QR code will be rendered here -->
+      <p>You must show it at entrance!</p>
     </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" integrity="sha512-CNgIRecGo7nphbeZ04Sc13ka07paqdeTu0WR1IM4kNcpmBAUSHSQX0FslNhTDadL4O5SAGapGt4FodqL8My0mA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script type="text/javascript">
 
-    <script>
       function validateReservation() {
-        // Προσομοίωση δεδομένων κράτησης (στην πράξη, αυτά έρχονται από backend)
+
         const reservation = {
-          resNumber: Math.floor(Math.random() * 100000),
+          id: Math.floor(Math.random() * 100000),
           tableNumber: Math.floor(Math.random() * 20) + 1,
           people: 4,
           name: "John",
@@ -84,11 +96,18 @@
           notes: "Birthday Celebration",
         };
 
+        new QRCode(document.getElementById("qrcode"), {
+          text: `http://localhost:8080/api/reservation/returnable/${reservation.id}`,
+          width: 150,
+          height: 150,
+          colorDark : "#000000",
+          colorLight : "#ffffff",
+          correctLevel: QRCode.CorrectLevel.H, // High error correction
+        });
+
         // Συμπλήρωση των στοιχείων στο modal
-        document.getElementById("resNumber").textContent =
-          reservation.resNumber;
-        document.getElementById("tableNumber").textContent =
-          reservation.tableNumber;
+        document.getElementById("reservationId").textContent = reservation.id;
+        document.getElementById("tableNumber").textContent = reservation.tableNumber;
         document.getElementById("people").textContent = reservation.people;
         document.getElementById("name").textContent = reservation.name;
         document.getElementById("surname").textContent = reservation.surname;
@@ -98,13 +117,8 @@
         document.getElementById("email").textContent = reservation.email;
         document.getElementById("notes").textContent = reservation.notes;
 
-        // Δημιουργία barcode (παράδειγμα με API)
-        const barcodeUrl = `https://api-bwipjs.metafloor.com/?bcid=code128&text=${reservation.resNumber}`;
-        document.getElementById("barcode").src = barcodeUrl;
       }
-
-      // Προσομοίωση πατήματος του κουμπιού επιβεβαίωσης κράτησης
-      setTimeout(validateReservation, 1000);
+      validateReservation();
     </script>
   </body>
 </html>

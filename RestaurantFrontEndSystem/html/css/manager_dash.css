@@ -21,6 +21,7 @@ body {
   margin: 20px 0;
   max-width: fit-content;
   height: 550px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
 }
 .centered{
   justify-items: center;
@@ -40,11 +41,13 @@ body {
 .sidebar {
   width: 250px;
   background-color: #6b5840;
-  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
   transition: all 0.3s ease;
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  border-top-right-radius: 10px 10px;
+  border-bottom-right-radius: 10px 10px;
 }
 
 .sidebar.collapsed {
@@ -160,6 +163,7 @@ body {
   font-weight: bold;
   margin-bottom: 20px;
   border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
 }
 
 .letter {
@@ -175,6 +179,7 @@ body {
   border-radius: 15px;
   margin-bottom: 2rem;
   color: white;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
 }
 
 .filter-container h3 {
@@ -227,7 +232,7 @@ body {
   width: 100%;
   background-color: #6b5840;
   border-radius: 15px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
   border-collapse: collapse;
   margin-bottom: 2rem;
   color: white;
@@ -487,6 +492,16 @@ textarea {
   width: 30%;
   text-align: center;
   padding: 10px;
+}
+
+#editUser {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 10px;
+  font-size: larger;
+  padding-bottom: 40px;
 }
 
 .profile-dashboard {

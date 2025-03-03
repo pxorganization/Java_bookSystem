@@ -308,6 +308,15 @@ async function showTablesView() {
   mainContent.appendChild(header);
   mainContent.appendChild(tablesView);
 
+  const now = new Date();
+  const hours = String(now.getHours()).padStart(2, '0'); // Ensures 2 digits (e.g., "05" instead of "5")
+  const minutes = String(now.getMinutes()).padStart(2, '0'); // Ensures 2 digits
+  const currentTime = `${hours}:${minutes}`;
+
+  const message = document.createElement("div");
+  message.innerHTML = `<h3>Here you can view the available tables at time: <b>${currentTime}</b>.</h3>`
+  mainContent.appendChild(message);
+
   // Initialize the Konva stage and layer
   stage = new Konva.Stage({
     container: "container",
